@@ -27,7 +27,7 @@
                 <div class="navbar">
                     <div class="parent">
                         <img class="wheat" src="image/wheat.png" alt="">
-                        <a href="form_input.php"><button class="button">Input Data Pertanian</button></a>
+                        <a href="form_input.php"><button class="button-input">Input Data Pertanian</button></a>
                         <a href="tampil_data.php"><button class="button">Tampil Data Pertanian</button></a>
                     </div>
                 </div>
@@ -80,11 +80,11 @@
                                         <input type="checkbox" id="sm_check" name="tanaman[]" value="semangka"><label for="sm_check"> Semangka</label><br>
                                     </td>
                                     <td>
-                                        <input class="input" id="pd" name="hasil[]" type="number" disabled><label> Kg.</label><br>
-                                        <input class="input" id="jg" name="hasil[]" type="number" disabled><label> Kg.</label><br>
-                                        <input class="input" id="cb" name="hasil[]" type="number" disabled><label> Kg.</label><br>
-                                        <input class="input" id="sg" name="hasil[]" type="number" disabled><label> Kg.</label><br>
-                                        <input class="input" id="sm" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input-disabled" id="pd" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input-disabled" id="jg" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input-disabled" id="cb" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input-disabled" id="sg" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input-disabled" id="sm" name="hasil[]" type="number" disabled><label> Kg.</label><br>
                                     </td>
                                 </tr>
                             </table>

@@ -127,6 +127,20 @@ require_once 'koneksi.php';
             transition: .7s;
         }
 
+        .button-tampil {
+            height: 6vh;
+            width: 13vw;
+            margin-top: .5vh;
+            margin-bottom: 2.5vh;
+            border: none;
+            border-radius: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: white;
+            transition: .7s;
+            background-color: #006633;
+        }
+
         .button:hover {
             background-color: #006633;
             color: white;
@@ -310,7 +324,7 @@ require_once 'koneksi.php';
                     <div class="parent">
                         <img class="wheat" src="image/wheat.png" alt="">
                         <a href="form_input.php"><button class="button">Input Data Pertanian</button></a>
-                        <a href="tampil_data.php"><button class="button">Tampil Data Pertanian</button></a>
+                        <a href="tampil_data.php"><button class="button-tampil">Tampil Data Pertanian</button></a>
                     </div>
                 </div>
             </div>
