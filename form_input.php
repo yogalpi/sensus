@@ -1,11 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="image/wheat.png">
     <title>Form input Data Pertanian</title>
 </head>
+
 <body>
     <div class="atas">
         <div class="top">
@@ -23,8 +27,8 @@
                 <div class="navbar">
                     <div class="parent">
                         <img class="wheat" src="image/wheat.png" alt="">
-                        <button class="button">Input Data Pertanian</button>
-                        <button class="button">Tampil Data Pertanian</button>
+                        <a href="form_input.php"><button class="button">Input Data Pertanian</button></a>
+                        <a href="tampil_data.php"><button class="button">Tampil Data Pertanian</button></a>
                     </div>
                 </div>
             </div>
@@ -41,12 +45,12 @@
                                 <tr>
                                     <td>NIK</td>
                                     <td>:</td>
-                                    <td><input class="input" type="number" required></td>
+                                    <td><input class="input" type="number" name="nik" required></td>
                                 </tr>
                                 <tr>
                                     <td>Nama</td>
                                     <td>:</td>
-                                    <td><input class="input" type="text" size="30" required></td>
+                                    <td><input class="input" type="text" size="30" name="nama" required></td>
                                 </tr>
                                 <tr>
                                     <td>Jenis Kelamin</td>
@@ -58,32 +62,36 @@
                                 <tr>
                                     <td>Tanggal Lahir</td>
                                     <td>:</td>
-                                    <td><input class="input" type="date" required></td>
+                                    <td><input class="input" type="date" name="tgl_lahir" required></td>
                                 </tr>
                                 <tr>
                                     <td>Luas Lahan</td>
                                     <td>:</td>
-                                    <td><input class="input" type="number" required><label for=""> m².</label></td>
+                                    <td><input class="input" type="number" name="luas_lahan" required><label for=""> m².</label></td>
                                 </tr>
-                                <tr  valign="top">
+                                <tr valign="top">
                                     <td>Jenis Tanaman &<br>Hasil Panen</td>
                                     <td>:</td>
                                     <td>
-                                        <input type="checkbox" id="pd" value=""><label for="pd"> Padi</label> <br>
-                                        <!-- <input type="checkbox" id="jg"><label for="jg"><label for=""> Jagung</label> <br>
-                                        <input type="checkbox" id="pd"><label for="pd"><label for=""> Cabai</label> <br>
-                                        <input type="checkbox" id="pd"><label for="pd"><label for=""> Singkong</label> <br>
-                                        <input type="checkbox" id="pd"><label for="pd"><label for=""> Semangka</label>  -->
+                                        <input type="checkbox" id="pd_check" name="tanaman[]" value="padi"><label for="pd_check"> Padi</label><br>
+                                        <input type="checkbox" id="jg_check" name="tanaman[]" value="jagung"><label for="jg_check"> Jagung</label><br>
+                                        <input type="checkbox" id="cb_check" name="tanaman[]" value="cabai"><label for="cb_check"> Cabai</label><br>
+                                        <input type="checkbox" id="sg_check" name="tanaman[]" value="singkong"><label for="sg_check"> Singkong</label><br>
+                                        <input type="checkbox" id="sm_check" name="tanaman[]" value="semangka"><label for="sm_check"> Semangka</label><br>
                                     </td>
                                     <td>
-                                        <input class="input" type="number" size="5" disabled><label for=""> Kg.</label><br>
+                                        <input class="input" id="pd" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input" id="jg" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input" id="cb" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input" id="sg" name="hasil[]" type="number" disabled><label> Kg.</label><br>
+                                        <input class="input" id="sm" name="hasil[]" type="number" disabled><label> Kg.</label><br>
                                     </td>
                                 </tr>
                             </table>
-                                <div class="button-action">
-                                    <input class="button-simpan" type="submit" value="Simpan">
-                                    <input class="button-batal" type="reset" value="Batal">
-                                </div>
+                            <div class="button-action">
+                                <input class="button-simpan" name="submit" type="submit" value="Simpan">
+                                <input class="button-batal" name="batal" type="reset" value="Batal">
+                            </div>
                         </form>
                     </div>
                     <div class="patern">
@@ -92,9 +100,111 @@
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/script.js"></script>
 </body>
+
 </html>
+
+<?php
+
+require_once 'koneksi.php';
+
+// Cek Apakah Tombol Submit Dipencet 
+if (isset($_POST['submit'])) {
+
+    $jenis = array();
+    $panen = array();
+    
+    // Cek Apakah semua kolom sudah diisi
+    if (isset($_POST['tanaman']) and isset($_POST['hasil']) and isset($_POST['jk']) != null) {
+
+        $nik = $_POST['nik'];
+        $data_duplikasi = mysqli_query($koneksi, "SELECT nik FROM petani WHERE nik='$nik'");
+
+        //Cek Apakah data Yang diinputkan sudah terdaftar
+        if (mysqli_num_rows($data_duplikasi) > 0) {
+
+            echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Data Sudah Terdaftar',
+              })
+            </script>";
+
+        } else {
+
+            $nama = $_POST['nama'];
+            $jenis_kelamin = $_POST['jk'];
+            $tgl_lahir = $_POST['tgl_lahir'];
+            $luas_lahan = $_POST['luas_lahan'];
+            $query = mysqli_query($koneksi, "INSERT INTO petani(id, nik, nama, jenis_kelamin, tanggal_lahir, luas_lahan) VALUES('', '$nik', '$nama', '$jenis_kelamin', '$tgl_lahir', '$luas_lahan')");
+
+            // Cek Apakah sudah tidak ada kesalahan saat menambahkan data petani
+            if ($query) {
+
+                $b = 0;
+                foreach ($_POST['tanaman'] as $jenis_tanaman) {
+
+                    for ($a = $b; $a < count($_POST['tanaman']); $a++) {
+                        $jenis[] = $jenis_tanaman;
+                        $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman) VALUES ('$nik','$jenis[$a]')");
+                        break;
+                    }
+
+                    // Cek Apakah sudah tidak ada kesalahan pada saat menambahkan data tanaman
+                    if ($insert_jenis) {
+
+                        foreach ($_POST['hasil'] as $hasil_panen) {
+
+                            $panen[] = $hasil_panen;
+                            for ($c = $b; $c < count($panen); $c++) {
+
+                                mysqli_query($koneksi, "UPDATE hasil SET hasil='$panen[$c]' WHERE nik='$nik' AND jenis_tanaman='$jenis[$a]'");
+                                break;
+                            }
+                        }
+
+                        echo "<script>
+                            Swal.fire(
+                            'Data Berhasil Ditambahkan',
+                            '',
+                            'success'
+                            )
+                            </script>";
+
+                    }else{
+
+                        echo "<script>alert('Ada Kesalahan Saat menambahkan data tanaman')</script>";
+                        
+                    }
+                    
+                    $b++;
+                }
+
+            }else{
+                
+                echo "<script>alert('Ada Kesalahan Saat menambahkan data Petani')</script>";
+
+            }
+
+        }
+
+    } else {
+
+        echo "<script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Oops...',
+            text: 'Pastikan Semua Data Telah Terisi',
+          })
+        </script>";
+
+    }
+}
+
+?>

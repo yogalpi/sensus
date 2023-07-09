@@ -1,6 +1,6 @@
 <?php
 
-$koneksi = new mysqli("localhost","root","","sensus_pertanian");
+$koneksi = mysqli_connect("localhost","root","","sensus_pertanian");
 
 // if($koneksi) {
 //     echo"Berhasil";
