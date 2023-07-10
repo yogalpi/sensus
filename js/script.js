@@ -65,3 +65,15 @@ sm.addEventListener("change", () => {
     }
 })
 
+var profil = document.getElementById('profil');
+var menu = document.getElementById('menu');
+// console.log(profil)
+profil.addEventListener('click' , () => {
+    menu.style.opacity = '100%';
+    menu.style.marginTop = '58vh';
+})
+profil.addEventListener('dblclick' , () => {
+    menu.style.opacity = '0';
+    menu.style.marginTop = '80vh';
+    // profil.style.backgroundColor = 'blue';
+})

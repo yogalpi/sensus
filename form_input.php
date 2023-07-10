@@ -18,7 +18,19 @@
         </div>
         <div class="utilities">
             <p>Hallo... Mas Ellon</p>
-            <img class="profil" src="image/man.png" alt="">
+            <img class="profil" id="profil" src="image/man.png" alt="">
+            <div id="menu" class="menu">
+                <div class="segitiga">
+                </div>
+                <div class="opsi">
+                    <div class="information">
+                        <!-- <p>Masih kosong</p> -->
+                        <a href=""><button class="opsi">Information</button></a>
+                        <a href=""><button class="opsi">Options</button></a>
+                        <a href=""><button class="opsi">Sign Out</button></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="full">
