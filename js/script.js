@@ -77,3 +77,5 @@ profil.addEventListener('dblclick' , () => {
     menu.style.marginTop = '80vh';
     // profil.style.backgroundColor = 'blue';
 })
+
+console.log("terbaru")
