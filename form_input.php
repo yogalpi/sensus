@@ -164,7 +164,8 @@ if (isset($_POST['submit'])) {
 
                     for ($a = $b; $a < count($_POST['tanaman']); $a++) {
                         $jenis[] = $jenis_tanaman;
-                        $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman) VALUES ('$nik','$jenis[$a]')");
+                        $lama_tanam = mysqli_query($koneksi, "SELECT lama_tanam FROM tanaman WHERE jenis_tanaman='$jenis[$a]'")
+                        $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman,lama_tanam) VALUES ('$nik','$jenis[$a]'),'$lama_tanam'");
                         break;
                     }
 
