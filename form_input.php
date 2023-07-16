@@ -1,4 +1,6 @@
-
+<?php
+require_once 'koneksi.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -123,7 +125,7 @@
 
 <?php
 
-require_once 'koneksi.php';
+
 
 // Cek Apakah Tombol Submit Dipencet 
 if (isset($_POST['submit'])) {
@@ -164,9 +166,11 @@ if (isset($_POST['submit'])) {
 
                     for ($a = $b; $a < count($_POST['tanaman']); $a++) {
                         $jenis[] = $jenis_tanaman;
-                        $lama_tanam = mysqli_query($koneksi, "SELECT lama_tanam FROM tanaman WHERE jenis_tanaman='$jenis[$a]'")
-                        $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman,lama_tanam) VALUES ('$nik','$jenis[$a]'),'$lama_tanam'");
-                        break;
+                        // $lama_tanam = mysqli_query($koneksi, "SELECT lama_tanam FROM tanaman WHERE jenis_tanaman=$jenis[$a]")
+                        if(mysqli_num_rows > 0){
+                            $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman,lama_tanam) VALUES ('$nik','$jenis[$a]'),'$lama_tanam'");
+                            break;
+                        }
                     }
 
                     // Cek Apakah sudah tidak ada kesalahan pada saat menambahkan data tanaman
