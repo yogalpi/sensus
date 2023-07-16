@@ -10,7 +10,109 @@ require_once 'koneksi.php';
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/x-icon" href="image/wheat.png">
     <title>Form input Data Pertanian</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
+<?php
+
+
+// Cek Apakah Tombol Submit Dipencet 
+if (isset($_POST['submit'])) {
+
+    $jenis = array();
+    $panen = array();
+    
+    // Cek Apakah semua kolom sudah diisi
+    if (isset($_POST['tanaman']) and isset($_POST['hasil']) and isset($_POST['jk']) != null) {
+
+        $nik = $_POST['nik'];
+        $data_duplikasi = mysqli_query($koneksi, "SELECT nik FROM petani WHERE nik='$nik'");
+
+        //Cek Apakah data Yang diinputkan sudah terdaftar
+        if (mysqli_num_rows($data_duplikasi) > 0) {
+
+            echo "<script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Data Sudah Terdaftar',
+              })
+            </script>";
+
+        } else {
+
+            $nama = $_POST['nama'];
+            $jenis_kelamin = $_POST['jk'];
+            $tgl_lahir = $_POST['tgl_lahir'];
+            $luas_lahan = $_POST['luas_lahan'];
+            $query = mysqli_query($koneksi, "INSERT INTO petani(id, nik, nama, jenis_kelamin, tanggal_lahir, luas_lahan) VALUES('', '$nik', '$nama', '$jenis_kelamin', '$tgl_lahir', '$luas_lahan')");
+
+            // Cek Apakah sudah tidak ada kesalahan saat menambahkan data petani
+            if ($query) {
+
+                $b = 0;
+                foreach ($_POST['tanaman'] as $jenis_tanaman) {
+
+                    for ($a = $b; $a < count($_POST['tanaman']); $a++) {
+                        $jenis[] = $jenis_tanaman;
+                        $lama_tanam = mysqli_query($koneksi, "SELECT lama_tanam FROM tanaman WHERE jenis_tanaman='$jenis[$a]'");
+                        if(mysqli_num_rows($lama_tanam) > 0){
+                            $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman,lama_tanam) VALUES ('$nik','$jenis[$a]'),'$lama_tanam'");
+                            break;
+                        }
+
+                    }
+
+                    // Cek Apakah sudah tidak ada kesalahan pada saat menambahkan data tanaman
+                    if ($insert_jenis) {
+
+                        foreach ($_POST['hasil'] as $hasil_panen) {
+                            $panen[] = $hasil_panen;
+                            for ($c = $b; $c < count($panen); $c++) {
+                                mysqli_query($koneksi, "UPDATE hasil SET hasil='$panen[$c]' WHERE nik='$nik' AND jenis_tanaman='$jenis[$a]'");
+                            }
+                        }
+
+                        echo "<script>
+                            Swal.fire(
+                            'Data Berhasil Ditambahkan',
+                            '',
+                            'success'
+                            )
+                            </script>";
+
+                    }else{
+
+                        echo "<script>alert('Ada Kesalahan Saat menambahkan data tanaman')</script>";
+                        
+                    }
+                    
+                    $b++;
+                }
+
+            }else{
+                
+                echo "<script>alert('Ada Kesalahan Saat menambahkan data Petani')</script>";
+
+            }
+
+        }
+
+    } else {
+
+        echo "<script>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Oops...',
+            text: 'Pastikan Semua Data Telah Terisi',
+          })
+        </script>";
+
+    }
+}
+
+?>
+
 
 <body>
     <div class="atas">
@@ -117,112 +219,7 @@ require_once 'koneksi.php';
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/script.js"></script>
 </body>
 
 </html>
-
-<?php
-
-
-
-// Cek Apakah Tombol Submit Dipencet 
-if (isset($_POST['submit'])) {
-
-    $jenis = array();
-    $panen = array();
-    
-    // Cek Apakah semua kolom sudah diisi
-    if (isset($_POST['tanaman']) and isset($_POST['hasil']) and isset($_POST['jk']) != null) {
-
-        $nik = $_POST['nik'];
-        $data_duplikasi = mysqli_query($koneksi, "SELECT nik FROM petani WHERE nik='$nik'");
-
-        //Cek Apakah data Yang diinputkan sudah terdaftar
-        if (mysqli_num_rows($data_duplikasi) > 0) {
-
-            echo "<script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Data Sudah Terdaftar',
-              })
-            </script>";
-
-        } else {
-
-            $nama = $_POST['nama'];
-            $jenis_kelamin = $_POST['jk'];
-            $tgl_lahir = $_POST['tgl_lahir'];
-            $luas_lahan = $_POST['luas_lahan'];
-            $query = mysqli_query($koneksi, "INSERT INTO petani(id, nik, nama, jenis_kelamin, tanggal_lahir, luas_lahan) VALUES('', '$nik', '$nama', '$jenis_kelamin', '$tgl_lahir', '$luas_lahan')");
-
-            // Cek Apakah sudah tidak ada kesalahan saat menambahkan data petani
-            if ($query) {
-
-                $b = 0;
-                foreach ($_POST['tanaman'] as $jenis_tanaman) {
-
-                    for ($a = $b; $a < count($_POST['tanaman']); $a++) {
-                        $jenis[] = $jenis_tanaman;
-                        // $lama_tanam = mysqli_query($koneksi, "SELECT lama_tanam FROM tanaman WHERE jenis_tanaman=$jenis[$a]")
-                        if(mysqli_num_rows > 0){
-                            $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman,lama_tanam) VALUES ('$nik','$jenis[$a]'),'$lama_tanam'");
-                            break;
-                        }
-
-                    }
-
-                    // Cek Apakah sudah tidak ada kesalahan pada saat menambahkan data tanaman
-                    if ($insert_jenis) {
-
-                        foreach ($_POST['hasil'] as $hasil_panen) {
-
-                            $panen[] = $hasil_panen;
-                            for ($c = $b; $c < count($panen); $c++) {
-
-                                mysqli_query($koneksi, "UPDATE hasil SET hasil='$panen[$c]' WHERE nik='$nik' AND jenis_tanaman='$jenis[$a]'");
-                                break;
-                            }
-                        }
-
-                        echo "<script>
-                            Swal.fire(
-                            'Data Berhasil Ditambahkan',
-                            '',
-                            'success'
-                            )
-                            </script>";
-
-                    }else{
-
-                        echo "<script>alert('Ada Kesalahan Saat menambahkan data tanaman')</script>";
-                        
-                    }
-                    
-                    $b++;
-                }
-
-            }else{
-                
-                echo "<script>alert('Ada Kesalahan Saat menambahkan data Petani')</script>";
-
-            }
-
-        }
-
-    } else {
-
-        echo "<script>
-        Swal.fire({
-            icon: 'warning',
-            title: 'Oops...',
-            text: 'Pastikan Semua Data Telah Terisi',
-          })
-        </script>";
-
-    }
-}
-
-?>
