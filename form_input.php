@@ -171,6 +171,7 @@ if (isset($_POST['submit'])) {
                             $insert_jenis = mysqli_query($koneksi, "INSERT INTO hasil (nik,jenis_tanaman,lama_tanam) VALUES ('$nik','$jenis[$a]'),'$lama_tanam'");
                             break;
                         }
+
                     }
 
                     // Cek Apakah sudah tidak ada kesalahan pada saat menambahkan data tanaman
